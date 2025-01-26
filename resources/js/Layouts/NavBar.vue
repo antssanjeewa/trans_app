@@ -1,0 +1,38 @@
+<script setup>
+import { Link, router } from '@inertiajs/vue3';
+import ApplicationMark from '@/Components/ApplicationMark.vue';
+import NavLink from '@/Components/NavLink.vue';
+
+import routes from '@/routes';
+
+const appName = import.meta.env.VITE_APP_NAME || 'My App';
+
+</script>
+
+<template>
+    <aside class="w-64 bg-white dark:bg-primary-800 shadow-md flex flex-col">
+        <div class="p-4 text-lg font-bold text-center">
+            <!-- Logo -->
+            <div class="shrink-0 flex items-center justify-center">
+                <Link :href="route('dashboard')">
+                <ApplicationMark class="block h-9 w-auto" />
+                </Link>
+                <div class="px-4">{{ appName }}</div>
+            </div>
+        </div>
+        <nav class="flex-grow">
+            <ul class="mt-4">
+                <li v-for="routeItem in routes" :key="routeItem.name">
+                    <NavLink :href="routeItem.href" :active="route().current(routeItem.active)">
+                        {{ routeItem.label }}
+                    </NavLink>
+                </li>
+            </ul>
+        </nav>
+        <div class="p-4 border-t  dark:border-primary-700">
+            <button class="w-full px-4 py-2 text-center text-white bg-red-500 rounded hover:bg-red-600">
+                Logout
+            </button>
+        </div>
+    </aside>
+</template>
