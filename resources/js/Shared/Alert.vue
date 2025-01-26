@@ -26,11 +26,8 @@
 </template>
 
 <script>
-import Icon from "@/Shared/Icon";
+
 export default {
-  components: {
-    Icon,
-  },
   props: {
     message: {
       type: String,

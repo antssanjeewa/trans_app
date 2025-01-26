@@ -30,7 +30,7 @@ const appName = import.meta.env.VITE_APP_NAME || 'My App';
             </ul>
         </nav>
         <div class="p-4 border-t  dark:border-primary-700">
-            <button class="w-full px-4 py-2 text-center text-white bg-red-500 rounded hover:bg-red-600">
+            <button class="w-full px-4 py-2 text-center text-white bg-red-900 rounded hover:bg-red-600">
                 Logout
             </button>
         </div>

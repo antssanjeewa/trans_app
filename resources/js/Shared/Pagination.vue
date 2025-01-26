@@ -1,18 +1,18 @@
 <template>
   <div
     class="
-      bg-gray-100
+      bg-primary-100 dark:bg-primary-700
       px-4
       py-3
       flex
       justify-between
-      border-t border-gray-200
+      border-t border-primary-200 dark:border-primary-600
       sm:px-6
     "
   >
     <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
       <div>
-        <p class="text-sm leading-5 text-gray-700">
+        <p class="text-sm leading-5 text-primary-700">
           Showing
           <span class="font-medium">{{ meta.from }}</span>
           to
@@ -25,7 +25,7 @@
       <div class="relative z-0 inline-flex shadow-sm print-none">
         <div
           v-if="links.prev === null"
-          class="paginate-btn text-gray-400"
+          class="paginate-btn text-primary-400 dark:border-primary-500"
           :class="{ 'ml-auto': links.prev }"
         >
           Previous
@@ -33,8 +33,8 @@
         <button
           v-else
           class="
-            paginate-btn
-            hover:bg-gray-400 hover:text-white
+            paginate-btn dark:border-primary-500
+            hover:bg-primary-400 hover:text-white 
             focus:border-indigo-500
           "
           :class="{ 'bg-white': links.prev }"
@@ -48,28 +48,28 @@
             :key="index"
             v-if="page != '...'"
             class="
-              paginate-btn
-              hover:bg-gray-400 hover:text-white
+              paginate-btn dark:border-primary-500
+              hover:bg-primary-400 hover:text-white
               focus:outline-none
             "
             :class="{
-              'bg-gray-500 text-white font-bold': page === meta.current_page,
+              'bg-primary-500 text-white font-bold': page === meta.current_page,
             }"
             @click="filters.page = page"
           >
             {{ page }}
           </button>
-          <p v-else :key="index" class="mr-1 mb-1 px-4 py-2">...</p>
+          <!-- <p v-else :key="index" class="mr-1 mb-1 px-4 py-2">...</p> -->
         </template>
 
-        <div v-if="links.next === null" class="paginate-btn text-gray-400">
+        <div v-if="links.next === null" class="paginate-btn text-primary-400 dark:border-primary-500">
           Next
         </div>
         <button
           v-else
           class="
-            paginate-btn
-            hover:bg-gray-400 hover:text-white
+            paginate-btn dark:border-primary-500
+            hover:bg-primary-400 hover:text-white
             focus:border-indigo-500
           "
           @click="filters.page ? (filters.page += 1) : (filters.page = 2)"
