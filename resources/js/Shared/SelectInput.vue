@@ -1,25 +1,51 @@
+<script setup>
+// Define the props
+const props = defineProps({
+  modelValue: String | Number,
+  dense: {
+    type: Boolean,
+    default: false
+  },
+  label: String,
+  id: {
+      type: String,
+    },
+    type: {
+      type: String,
+      default: "text",
+    },
+    items: Array,
+    error: String,
+});
+
+// Define the emits
+const emit = defineEmits(['update:modelValue']);
+
+// Emit the update:modelValue event when input changes
+const updateValue = (event) => {
+  emit('update:modelValue', event.target.value);
+};
+</script>
+
 <template>
   <div class="col-span-6 sm:col-span-3">
     <label
       :for="id"
-      class="block text-sm font-medium leading-5 text-gray-700"
+      class="block text-sm font-medium leading-5 text-gray-700 dark:text-primary-100"
       >{{ label }}</label
     >
     <select
       :id="id"
       ref="input"
-      :value="value"
-      @input="$emit('input', $event.target.value)"
-      v-bind="$attrs"
+      :value="modelValue"
+      @input="updateValue"
       :class="[error_border, size]"
       class="
         mt-1
         block
         w-full
-        py-2
-        px-3
-        border border-gray-300
-        bg-white
+        border border-gray-300 dark:border-primary-500 dark:focus:border-primary-500
+        bg-white dark:bg-primary-600 dark:focus:bg-primary-500
         rounded-md
         shadow-sm
         focus:outline-none focus:shadow-outline-blue focus:border-blue-300
@@ -27,6 +53,7 @@
         duration-150
         ease-in-out
         sm:text-sm sm:leading-5
+        focus:ring-0
       "
     >
       <option
@@ -43,30 +70,12 @@
 
 <script>
 export default {
-  inheritAttrs: false,
-  props: {
-    id: {
-      type: String,
-      default() {
-        return `text-input-${this._uid}`;
-      },
-    },
-    type: {
-      type: String,
-      default: "text",
-    },
-    dense: Boolean,
-    items: Array,
-    value: [String, Number],
-    label: String,
-    error: String,
-  },
   computed: {
     size() {
       return this.dense ? "py-1 text-sm rounded" : "form-select";
     },
     error_border() {
-      return this.error_val ? "border-red-600" : "";
+      return this.error ? "border-red-600" : "";
     },
   },
   methods: {

@@ -13,7 +13,7 @@ const emit = defineEmits(['update:modelValue'])
 <template>
   <div class="relative">
     <select :value="modelValue" @input="emit('update:modelValue', $event.target.value)" :class="classes"
-      class="h-full rounded-none border-r-0 dark:border-primary-600 form-input block appearance-none bg-white dark:bg-primary-700 text-primary-500 dark:text-primary-200 py-2 px-4 pr-8 leading-tight focus:outline-none">
+      class="h-full rounded-none border-r-0 dark:border-primary-600 form-input block appearance-none bg-white dark:bg-primary-700 text-primary-500 dark:text-primary-200 py-2 px-4 pr-8 leading-tight focus:outline-none text-sm">
       <option value="5">5</option>
       <option value="15">15</option>
       <option value="25">25</option>

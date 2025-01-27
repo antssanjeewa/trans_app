@@ -1,33 +1,83 @@
+<script setup>
+
+// Define the props
+const props = defineProps({
+  modelValue: String | Number,
+  dense: {
+    type: Boolean,
+    default: false
+  },
+  label: String,
+  id: {
+    type: String,
+  },
+  type: {
+    type: String,
+    default: "text",
+  },
+  required: Boolean,
+
+  error: String,
+  autofocus: {
+    type: Boolean,
+    default: false,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  placeholder: {
+    type: String,
+  },
+});
+
+// Define the emits
+const emit = defineEmits(['update:modelValue', 'keyup']);
+
+// Emit the update:modelValue event when input changes
+const updateValue = (event) => {
+  emit('update:modelValue', event.target.value);
+};
+</script>
 <template>
-  <div class="col-span-6 sm:col-span-3">
+  <div v-bind="$attrs">
     <label
-      v-if="label"
-      class="block text-sm font-medium leading-5 text-gray-700"
-      :for="id"
-      >{{ label }} <span v-if="required" class="text-red-500">*</span>:</label
-    >
+        v-if="label"
+        class="block text-sm font-medium leading-5 text-primary-700 dark:text-primary-100"
+        :for="id"
+    >{{ label }} <span
+          v-if="required"
+          class="text-red-500"
+      >*</span>:</label>
+
     <input
-      :id="id"
-      ref="input"
-      v-bind="$attrs"
-      :disabled="disabled"
-      :placeholder="placeholder"
-      class="
-        mt-1
-        flex flex-coll
-        w-full
-        transition
-        duration-150
-        ease-in-out
-        sm:text-sm sm:leading-5
-      "
-      :class="[error_border, size]"
-      :type="type"
-      :value="value"
-      @input="$emit('input', $event.target.value)"
-      @keyup="$emit('keyup', $event)"
+        :id="id"
+        ref="input"
+        :disabled="disabled"
+        :placeholder="placeholder"
+        class="
+          block
+          border-primary-300
+          dark:border-primary-500
+          focus:border-primary-300
+          dark:focus:border-primary-500 
+          focus:ring-0 
+          mt-1 
+          rounded-md
+          shadow-sm 
+          w-full
+          dark:bg-primary-600 dark:focus:bg-primary-500
+        "
+        :class="[error_border, size]"
+        :type="type"
+        :value="modelValue"
+        @input="updateValue"
+        @keyup="$emit('keyup', $event)"
     />
-    <div v-if="error_val" class="text-red-700 mt-2 text-sm">
+    <div
+        v-if="error_val"
+        class="text-red-700 mt-2 text-sm"
+    >
       {{ error_val }}
     </div>
   </div>
@@ -36,34 +86,7 @@
 <script>
 export default {
   inheritAttrs: false,
-  props: {
-    id: {
-      type: String,
-      // default() {
-      //   return `text-input-${this._uid}`;
-      // },
-    },
-    type: {
-      type: String,
-      default: "text",
-    },
-    required: Boolean,
-    dense: Boolean,
-    value: [String, Number],
-    label: String,
-    error: String,
-    autofocus: {
-      type: Boolean,
-      default: false,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    placeholder: {
-      type: String,
-    },
-  },
+
   data() {
     return {
       error_val: this.error,
@@ -86,7 +109,7 @@ export default {
   },
   computed: {
     size() {
-      return this.dense ? "py-1 text-sm rounded" : "form-input";
+      return this.dense ? "text-sm rounded" : "";
     },
     error_border() {
       return this.error_val ? "border-red-600" : "";

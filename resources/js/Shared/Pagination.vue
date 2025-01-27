@@ -1,7 +1,10 @@
+<script setup>
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/solid';
+</script>
 <template>
   <div
     class="
-      bg-primary-100 dark:bg-primary-700
+      bg-primary-100 dark:bg-primary-700 
       px-4
       py-3
       flex
@@ -12,7 +15,7 @@
   >
     <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
       <div>
-        <p class="text-sm leading-5 text-primary-700">
+        <p class="text-sm leading-5 text-primary-700 dark:text-primary-400">
           Showing
           <span class="font-medium">{{ meta.from }}</span>
           to
@@ -28,7 +31,7 @@
           class="paginate-btn text-primary-400 dark:border-primary-500"
           :class="{ 'ml-auto': links.prev }"
         >
-          Previous
+        <ChevronLeftIcon class="h-5 w-5"/>
         </div>
         <button
           v-else
@@ -37,10 +40,10 @@
             hover:bg-primary-400 hover:text-white 
             focus:border-indigo-500
           "
-          :class="{ 'bg-white': links.prev }"
+          
           @click="filters.page -= 1"
         >
-          Previous
+        <ChevronLeftIcon class="h-5 w-5"/>
         </button>
 
         <template v-for="(page, index) in pages">
@@ -63,7 +66,7 @@
         </template>
 
         <div v-if="links.next === null" class="paginate-btn text-primary-400 dark:border-primary-500">
-          Next
+          <ChevronRightIcon class="w-5 h-5"/>
         </div>
         <button
           v-else
@@ -74,7 +77,7 @@
           "
           @click="filters.page ? (filters.page += 1) : (filters.page = 2)"
         >
-          Next
+          <ChevronRightIcon class="h-5 w-5"/>
         </button>
       </div>
     </div>
@@ -82,6 +85,8 @@
 </template>
 
 <script>
+
+
 export default {
   props: {
     meta: Object,

@@ -3,10 +3,15 @@ import { Link, router } from '@inertiajs/vue3';
 import ApplicationMark from '@/Components/ApplicationMark.vue';
 import NavLink from '@/Components/NavLink.vue';
 
-import routes from '@/routes';
+import { userRoutes, adminRoutes } from '@/routes';
+import { ref } from 'vue';
 
 const appName = import.meta.env.VITE_APP_NAME || 'My App';
 
+const isAdminPanelOpen = ref(true);
+const toggleAdminRoutes = () => {
+    isAdminPanelOpen.value = !isAdminPanelOpen.value;
+};
 </script>
 
 <template>
@@ -22,11 +27,29 @@ const appName = import.meta.env.VITE_APP_NAME || 'My App';
         </div>
         <nav class="flex-grow">
             <ul class="mt-4">
-                <li v-for="routeItem in routes" :key="routeItem.name">
+                <li v-for="routeItem in userRoutes" :key="routeItem.name">
                     <NavLink :href="routeItem.href" :active="route().current(routeItem.active)">
                         {{ routeItem.label }}
                     </NavLink>
                 </li>
+
+                <li>
+                    <div class="border-b my-auto px-4 py-2 text-sm dark:border-primary-700 dark:bg-opacity-50 dark:bg-primary-900 cursor-pointer flex items-center justify-between"
+                        @click="toggleAdminRoutes">
+                        <span>Admin Panel</span>
+                        <span :class="{ 'rotate-180': isAdminPanelOpen }" class="transition-transform">
+                            <Icon icon="down_arrow" classes="fill-current h-4 w-4" />
+                        </span>
+                    </div>
+                </li>
+
+
+                <li v-if="isAdminPanelOpen" v-for="routeItem in adminRoutes" :key="routeItem.name">
+                    <NavLink class="pl-[45px]" :href="routeItem.href" :active="route().current(routeItem.active)">
+                        {{ routeItem.label }}
+                    </NavLink>
+                </li>
+
             </ul>
         </nav>
         <div class="p-4 border-t  dark:border-primary-700">

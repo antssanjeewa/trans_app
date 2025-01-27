@@ -8,6 +8,7 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 
 import Icon from "@/Shared/Icon.vue";
 import AppLayout from '@/Layouts/AppLayout.vue';
+import {Link} from '@inertiajs/vue3';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -20,6 +21,7 @@ createInertiaApp({
             .use(ZiggyVue)
             .component('Icon',Icon)
             .component('AppLayout',AppLayout)
+            .component('Link',Link)
             .mount(el);
     },
     progress: {

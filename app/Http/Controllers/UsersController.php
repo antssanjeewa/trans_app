@@ -22,7 +22,7 @@ class UsersController extends Controller
     public function create()
     {
         $roles = Role::get()->pluck('name');
-        return inertia('User/UserForm', [
+        return inertia('User/form', [
             "roles" => $roles
         ]);
     }
@@ -47,7 +47,7 @@ class UsersController extends Controller
     public function edit(User $user)
     {
         $roles = Role::get()->pluck('name');
-        return inertia('User/UserForm', [
+        return inertia('User/form', [
             'member' => [
                 'id' => $user->id,
                 'name' => $user->name,

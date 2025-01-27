@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UsersController;
+
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use phpDocumentor\Reflection\Types\Resource_;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -28,4 +29,5 @@ Route::middleware([
     })->name('settings');
 
     Route::resource('users',UsersController::class);
+    Route::resource('roles',RoleController::class);
 });
