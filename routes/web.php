@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UsersController;
 
@@ -30,4 +31,5 @@ Route::middleware([
 
     Route::resource('users',UsersController::class);
     Route::resource('roles',RoleController::class);
+    Route::resource('departments',DepartmentController::class);
 });

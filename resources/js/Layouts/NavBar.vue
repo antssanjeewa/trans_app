@@ -2,6 +2,7 @@
 import { Link, router } from '@inertiajs/vue3';
 import ApplicationMark from '@/Components/ApplicationMark.vue';
 import NavLink from '@/Components/NavLink.vue';
+import * as icons from '@heroicons/vue/24/solid';
 
 import { userRoutes, adminRoutes } from '@/routes';
 import { ref } from 'vue';
@@ -27,14 +28,15 @@ const toggleAdminRoutes = () => {
         </div>
         <nav class="flex-grow">
             <ul class="mt-4">
-                <li v-for="routeItem in userRoutes" :key="routeItem.name">
+                <li v-for="routeItem in userRoutes" :key="routeItem.name" >
                     <NavLink :href="routeItem.href" :active="route().current(routeItem.active)">
+                        <component :is="icons[routeItem.icon]" class="w-6 h-6 mr-3" v-if="routeItem.icon" />
                         {{ routeItem.label }}
                     </NavLink>
                 </li>
 
                 <li>
-                    <div class="border-b my-auto px-4 py-2 text-sm dark:border-primary-700 dark:bg-opacity-50 dark:bg-primary-900 cursor-pointer flex items-center justify-between"
+                    <div class="border-b my-auto pl-6 py-2 text-sm dark:border-primary-700 dark:bg-opacity-50 dark:bg-primary-900 cursor-pointer flex items-center justify-between"
                         @click="toggleAdminRoutes">
                         <span>Admin Panel</span>
                         <span :class="{ 'rotate-180': isAdminPanelOpen }" class="transition-transform">
@@ -45,7 +47,9 @@ const toggleAdminRoutes = () => {
 
 
                 <li v-if="isAdminPanelOpen" v-for="routeItem in adminRoutes" :key="routeItem.name">
-                    <NavLink class="pl-[45px]" :href="routeItem.href" :active="route().current(routeItem.active)">
+                    
+                    <NavLink class="pl-[40px]" :href="routeItem.href" :active="route().current(routeItem.active)">
+                        <component :is="icons[routeItem.icon]" class="w-6 h-6 mr-3" v-if="routeItem.icon" />
                         {{ routeItem.label }}
                     </NavLink>
                 </li>

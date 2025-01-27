@@ -8,6 +8,7 @@ import { Link, router, useForm } from '@inertiajs/vue3';
 import throttle from "lodash/throttle";
 import pickBy from "lodash/pickBy";
 import { CheckIcon, PencilSquareIcon, PlusIcon, XMarkIcon } from '@heroicons/vue/24/solid'
+import AddNewBtn from '@/Components/AddNewBtn.vue';
 
 const props = defineProps({
     items: Array | Object,
@@ -86,19 +87,13 @@ const currentPath = computed(() => {
                     ></SearchFilter>
                 </div>
                 <!--
-                        Create Button
-                    -->
-                <Link
-                    class="rounded-md text-sm py-2 px-3 tracking-wide bg-blue-900 hover:bg-blue-800 flex"
-                    :href="currentPath + '/create'"
-                >
-                <PlusIcon class="h-5 w-5 mr-2" />
-                <span>Add New</span>
-                </Link>
+                    Create Button
+                -->
+                <AddNewBtn :href="currentPath + '/create'"/>
             </div>
             <!--
-                    Data Table
-                -->
+                Data Table
+            -->
             <DataTable
                 :items="items"
                 :headers="headers"

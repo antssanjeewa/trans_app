@@ -5,15 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreDepartmentRequest;
 use App\Http\Requests\UpdateDepartmentRequest;
 use App\Models\Department;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class DepartmentController extends Controller
 {
+    private $title = "departments";
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
+    public function index(){
+        $roles = JsonResource::collection(Department::paginate());
+
+        return inertia('Common/index',[
+            'title' => $this->title,
+            "items" => $roles,
+            'filters' => request()->all('search', 'count'),
+        ]);
     }
 
     /**
@@ -21,7 +28,9 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('Common/form',[
+            'title' => $this->title
+        ]);
     }
 
     /**
@@ -29,7 +38,8 @@ class DepartmentController extends Controller
      */
     public function store(StoreDepartmentRequest $request)
     {
-        //
+        Department::create($request->validated());
+        return to_route('departments.index');
     }
 
     /**
@@ -45,7 +55,10 @@ class DepartmentController extends Controller
      */
     public function edit(Department $department)
     {
-        //
+        return inertia('Common/form',[
+            'title' => $this->title,
+            'item' => $department
+        ]);
     }
 
     /**
@@ -53,7 +66,8 @@ class DepartmentController extends Controller
      */
     public function update(UpdateDepartmentRequest $request, Department $department)
     {
-        //
+        $department->update($request->validated());
+        return to_route('departments.index');
     }
 
     /**

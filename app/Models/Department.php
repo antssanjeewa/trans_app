@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Trait\GenerateUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,6 +11,7 @@ class Department extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use GenerateUuid;
 
     protected $fillable = [
         'name',
