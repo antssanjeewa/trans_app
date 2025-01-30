@@ -10,6 +10,13 @@ export const userRoutes = [
     },
 
     { 
+        name: 'vehicles', 
+        label: 'Vehicles', 
+        icon: "TruckIcon", 
+        href: route('vehicles.index'), 
+        active: 'vehicles*' 
+    },
+    { 
         name: 'users', 
         label: 'Users', 
         icon: "UsersIcon", 

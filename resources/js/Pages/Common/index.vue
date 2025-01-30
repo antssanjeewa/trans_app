@@ -1,13 +1,13 @@
 <script setup>
+import { computed, watch } from 'vue';
+import { Link, router, useForm } from '@inertiajs/vue3';
+import { createThrottledHandler } from '@/utils';
+import { CheckIcon, PencilSquareIcon, XMarkIcon } from '@heroicons/vue/24/solid'
+
 import DataTable from '@/Shared/DataTable.vue';
 import SearchFilter from "@/Shared/SearchFilter.vue";
 import SelectList from "@/Shared/SelectList.vue";
 import Alert from "@/Shared/Alert.vue";
-import { computed, watch } from 'vue';
-import { Link, router, useForm } from '@inertiajs/vue3';
-import throttle from "lodash/throttle";
-import pickBy from "lodash/pickBy";
-import { CheckIcon, PencilSquareIcon, PlusIcon, XMarkIcon } from '@heroicons/vue/24/solid'
 import AddNewBtn from '@/Components/AddNewBtn.vue';
 
 const props = defineProps({
@@ -30,26 +30,8 @@ const form = useForm({
     page: props.filters.page || 1,
 });
 
-// Throttled function
-const throttledHandler = throttle(() => {
-    const query = pickBy(form); // Remove empty or undefined values from form
-    const queryParams = Object.keys(query).length ? query : { remember: "forget" };
-
-    router.visit(
-        window.route(`${props.title}.index`, queryParams),
-        { preserveState: true }
-    );
-}, 150);
-
-// Watcher for `form`
-watch(form, () => { throttledHandler(); }, { deep: true });
-
-function deleteUser(id) {
-    if (confirm("Are You sure you want to delete this item ?")) {
-        this.$inertia.delete(props.title + "/" + id);
-    }
-};
-
+const throttledHandler = createThrottledHandler(form, 'users.index');
+watch(() => form, throttledHandler, { deep: true });
 
 const currentPath = computed(() => {
     return window.location.pathname;
@@ -70,9 +52,7 @@ const currentPath = computed(() => {
             <h1 class="my-8 font-bold text-3xl capitalize">{{ title }} List</h1>
 
             <div class="mb-3 flex justify-between items-center">
-                <!--
-                        Filters
-                    -->
+                <!-- Filters -->
                 <div class="flex max-w-md mr-4">
                     <!-- Select Row Count -->
                     <SelectList
@@ -86,9 +66,8 @@ const currentPath = computed(() => {
                         @reset="form.reset()"
                     ></SearchFilter>
                 </div>
-                <!--
-                    Create Button
-                -->
+                
+                <!-- Create Button -->
                 <AddNewBtn :href="currentPath + '/create'"/>
             </div>
             <!--

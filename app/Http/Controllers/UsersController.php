@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
+use App\Models\User;
+use App\Models\Department;
+use Illuminate\Http\Request;
 use App\Http\Resources\UserResouce;
 use Illuminate\Support\Facades\Request as FRequest;
-use Illuminate\Http\Request;
-use App\Models\User;
 
 class UsersController extends Controller
 {
@@ -21,9 +23,12 @@ class UsersController extends Controller
 
     public function create()
     {
-        $roles = Role::get()->pluck('name');
-        return inertia('User/form', [
-            "roles" => $roles
+        $roles = Role::select(['id','name'])->get();
+        $departments = Department::select(['id','name'])->get();
+
+        return inertia('Users/form', [
+            "roles" => $roles,
+            "departments" => $departments,
         ]);
     }
 
@@ -31,30 +36,25 @@ class UsersController extends Controller
     {
         $request->validate([
             'name'              => 'required | string | max:100',
-            'role'              => 'required | string | max:50',
             'email'             => 'required | email | unique:users',
             'password'          => 'required',
             'password_confirm'  => 'required|same:password',
         ]);
-        $request['password'] = bcrypt($request->password);
-        $user = User::create($request->all());
 
-        $user->addNewRemark();
+        $user = User::create($request->all());
 
         return redirect()->route('users.index')->with('success', 'User Created Successfully');
     }
 
     public function edit(User $user)
     {
-        $roles = Role::get()->pluck('name');
-        return inertia('User/form', [
-            'member' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'role' => $user->role,
-            ],
-            "roles" => $roles
+        $roles = Role::select(['id','name'])->get();
+        $departments = Department::select(['id','name'])->get();
+
+        return inertia('Users/form', [
+            'user' => $user,
+             "roles" => $roles,
+            "departments" => $departments,
         ]);
     }
 
@@ -63,15 +63,9 @@ class UsersController extends Controller
         $request->validate([
             'name' => 'required | string | max:100',
             'email' => 'required | email | max:50',
-            'role' => 'required | string | max:50',
-            'remark' => 'required | string | min:6'
         ]);
 
-        $old_item = clone $user;
-
         $user->update($request->all());
-
-        $user->updateRemark($old_item, $request->remark);
 
         return redirect()->route('users.index')->with('success', 'User Updated Successfully');
     }
@@ -79,8 +73,6 @@ class UsersController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-
-        $user->deleteRemark();
 
         return redirect()->route('users.index')->with('success', 'User Deleted Successfully');
     }

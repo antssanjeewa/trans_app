@@ -36,7 +36,7 @@ const toggleAdminRoutes = () => {
                 </li>
 
                 <li>
-                    <div class="border-b my-auto pl-6 py-2 text-sm dark:border-primary-700 dark:bg-opacity-50 dark:bg-primary-900 cursor-pointer flex items-center justify-between"
+                    <div class="my-auto px-6 py-2 text-sm dark:bg-opacity-50 dark:bg-primary-700 cursor-pointer flex items-center justify-between"
                         @click="toggleAdminRoutes">
                         <span>Admin Panel</span>
                         <span :class="{ 'rotate-180': isAdminPanelOpen }" class="transition-transform">

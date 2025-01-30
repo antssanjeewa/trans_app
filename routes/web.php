@@ -4,6 +4,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UsersController;
 
+use App\Http\Controllers\VehicleController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -29,6 +30,9 @@ Route::middleware([
         return Inertia::render('Settings');
     })->name('settings');
 
+
+    Route::resource('vehicles',VehicleController::class);
+    
     Route::resource('users',UsersController::class);
     Route::resource('roles',RoleController::class);
     Route::resource('departments',DepartmentController::class);

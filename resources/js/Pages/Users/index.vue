@@ -39,13 +39,7 @@ function deleteUser(id) {
     this.$inertia.delete("users/" + id);
   }
 }
-function reset() {
-  props.form = {
-    search: "",
-    page: 1,
-    count: "15",
-  };
-}
+
 </script>
 
 <template>
@@ -65,7 +59,7 @@ function reset() {
             <SelectList v-model="form.count" classes="rounded-l-md" />
 
             <!-- Search field -->
-            <SearchFilter v-model="form.search" @reset="reset"></SearchFilter>
+            <SearchFilter v-model="form.search" @reset="form.reset()"></SearchFilter>
           </div>
           <!--
               Create Button
