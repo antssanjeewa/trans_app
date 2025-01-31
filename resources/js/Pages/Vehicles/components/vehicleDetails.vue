@@ -7,7 +7,15 @@ defineProps({
 </script>
 
 <template>
-  <TruckIcon class="w-40 mx-auto" />
+  <img
+    v-if="vehicle.files[0]"
+    :src="`/storage/${vehicle.files[0]?.path}`"
+    alt="image"
+    class="mx-auto rounded"
+    width="150"
+  />
+  <TruckIcon v-else class="w-40" />
+
   <div class="p-4 rounded flex text-sm justify-between">
     <div class="flex-grow space-y-1 text-left">
       <p>Model :</p>

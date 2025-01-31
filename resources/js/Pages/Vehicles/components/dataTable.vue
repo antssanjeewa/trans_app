@@ -1,13 +1,13 @@
 <script setup>
-import {
-  ChevronDoubleLeftIcon,
-  ChevronDoubleRightIcon
-} from "@heroicons/vue/24/solid";
+import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon } from "@heroicons/vue/24/solid";
 
 const props = defineProps({
   items: Object,
-  headers: Array
+  headers: Array,
 });
+
+const emit = defineEmits(['loadData']);
+
 </script>
 
 <template>
@@ -27,7 +27,7 @@ const props = defineProps({
       </thead>
 
       <!-- Table Body -->
-      <tbody class="divide-y divide-primary-200 dark:divide-primary-800">
+      <tbody v-if="items" class="divide-y divide-primary-200 dark:divide-primary-800">
         <tr
           v-for="item in items.data"
           :key="item.id"
@@ -42,16 +42,15 @@ const props = defineProps({
       </tbody>
     </table>
 
-
     <!-- Pagination Controls for Expenses -->
-    <div class="flex text-xs justify-end items-center mt-4">
+    <div v-if="items" class="flex text-xs justify-end items-center mt-4">
       <button
-        @click="previousPage('items')"
+        @click="$emit('loadData',items.meta.current_page - 1)"
         :disabled="items.meta.current_page === 1"
-        class="px-3 py-2 border border-primary-900 rounded dark:text-primary-600"
-        :class="{
-          'hover:border-primary-800 dark:text-primary-300': items.meta.current_page != 1,
-        }"
+        class="px-3 py-2 border border-primary-900 rounded"
+        :class="items.meta.current_page != 1
+          ? 'hover:border-primary-800 dark:text-primary-200'
+          : 'dark:text-primary-600'"
       >
         <ChevronDoubleLeftIcon class="w-3" />
       </button>
@@ -62,13 +61,12 @@ const props = defineProps({
       >
 
       <button
-        @click="nextPage('items')"
+        @click="$emit('loadData',items.meta.current_page + 1)"
         :disabled="items.meta.current_page === items.meta.last_page"
-        class="px-3 py-2 border border-primary-900 rounded dark:text-primary-600"
-        :class="{
-          'hover:border-primary-800 dark:text-primary-300':
-            items.meta.current_page != items.meta.last_page,
-        }"
+        class="px-3 py-2 border border-primary-900 rounded "
+        :class="items.meta.current_page != items.meta.last_page
+          ? 'hover:border-primary-800 dark:text-primary-200'
+          : 'dark:text-primary-600'"
       >
         <ChevronDoubleRightIcon class="w-3" />
       </button>

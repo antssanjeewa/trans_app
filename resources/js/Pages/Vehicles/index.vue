@@ -42,7 +42,9 @@ watch(() => form, throttledHandler, { deep: true });
         v-for="item in items" :key="item.id" 
         class="text-center border p-3 rounded-xl dark:border-primary-700">
           <Link :href="route('vehicles.show', item.id)" >
-            <TruckIcon class="w-40" />
+
+          <img v-if="item.files[0]" :src="`/storage/${item.files[0]?.path}`" alt="image" width="150" >
+          <TruckIcon v-else class="w-40" />
 
             <div class="dark:bg-primary-700">
               <div>{{ item.reg_number }}</div>

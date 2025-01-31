@@ -1,5 +1,5 @@
 <script setup>
-import { Link } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
 import { ref } from "vue";
 import { TrashIcon, PencilIcon, ChevronLeftIcon } from "@heroicons/vue/24/solid";
 
@@ -11,6 +11,7 @@ const props = defineProps({
   item: Object,
   transports: Object,
   expenses: Object,
+  users: Object,
   success: String,
 });
 
@@ -19,17 +20,42 @@ const activeTab = ref("transports");
 
 const transportHeaders = [
   { text: "ID", value: "id" },
-  { text: "Name", value: "reg_number" },
+  { text: "Date", value: "date" },
+  { text: "From", value: "from" },
+  { text: "To", value: "to" },
+  { text: "Distance (Km)", value: "distance" },
+  { text: "Client", value: "user_id" },
   { text: "", value: "actions" },
 ];
 
 const expensesHeaders = [
   { text: "ID", value: "id" },
-  { text: "Name", value: "reg_number" },
-  { text: "Status", value: "is_active" },
+  { text: "Date", value: "date" },
+  { text: "Ref Number", value: "ref_number" },
+  { text: "Category", value: "category" },
+  { text: "Amount", value: "amount" },
   { text: "", value: "actions" },
 ];
 
+const changeTab = () => {
+  if (!props.expenses) loadExpenses();
+
+  activeTab.value = "expenses";
+};
+
+const loadExpenses = (page = 1) => {
+  router.reload({
+    only: ["expenses"],
+    data: { page: page },
+  });
+};
+
+const loadTransports = (page = 1) => {
+  router.reload({
+    only: ["transports"],
+    data: { page: page },
+  });
+};
 </script>
 
 <template>
@@ -73,27 +99,27 @@ const expensesHeaders = [
                 :class="{ 'border-b-2 border-primary-500': activeTab === 'transports' }"
                 class="px-4 py-2 focus:outline-none"
               >
-                Latest Transports
+                Transports
               </button>
               <button
-                @click="activeTab = 'expenses'"
+                @click="changeTab"
                 :class="{ 'border-b-2 border-primary-500': activeTab === 'expenses' }"
                 class="px-4 py-2 focus:outline-none"
               >
-                Latest Expenses
+                Expenses
               </button>
             </div>
 
             <!-- Add btn -->
-            <DialogForm :activeTab="activeTab" :vehicle="item"/>
+            <DialogForm :activeTab="activeTab" :vehicle="item" :users="users" />
           </div>
 
           <!-- Latest Transports Table -->
           <div v-if="activeTab === 'transports'" class="overflow-x-auto">
-            <DataTable :items="transports" :headers="transportHeaders" />
+            <DataTable :items="transports" :headers="transportHeaders" @loadData="loadTransports" />
           </div>
           <div v-if="activeTab === 'expenses'" class="overflow-x-auto">
-            <DataTable :items="expenses" :headers="expensesHeaders" />
+            <DataTable :items="expenses" :headers="expensesHeaders" @loadData="loadExpenses"  />
           </div>
         </div>
 

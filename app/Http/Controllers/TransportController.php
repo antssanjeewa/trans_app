@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreExpensesRequest;
-use App\Http\Requests\UpdateExpensesRequest;
-use App\Models\Expenses;
+use App\Http\Requests\StoreTransportRequest;
+use App\Http\Requests\UpdateTransportRequest;
+use App\Models\Transport;
 
-class ExpensesController extends Controller
+class TransportController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,9 +27,9 @@ class ExpensesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreExpensesRequest $request)
+    public function store(StoreTransportRequest $request)
     {
-        Expenses::create($request->all());
+        Transport::create($request->all());
 
         return redirect()->back();
     }
@@ -37,7 +37,7 @@ class ExpensesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Expenses $expenses)
+    public function show(Transport $transport)
     {
         //
     }
@@ -45,7 +45,7 @@ class ExpensesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Expenses $expenses)
+    public function edit(Transport $transport)
     {
         //
     }
@@ -53,7 +53,7 @@ class ExpensesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateExpensesRequest $request, Expenses $expenses)
+    public function update(UpdateTransportRequest $request, Transport $transport)
     {
         //
     }
@@ -61,7 +61,7 @@ class ExpensesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Expenses $expenses)
+    public function destroy(Transport $transport)
     {
         //
     }

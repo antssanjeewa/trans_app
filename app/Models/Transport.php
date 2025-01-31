@@ -5,16 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Expenses extends Model
+class Transport extends Model
 {
+    
     use HasFactory;
 
     protected $fillable = [
-        'ref_number',
         'date',
-        'amount',
+        'from',
+        'to',
         'description',
-        'category',
+        'distance',
+        'user_id',
+        'driver_id',
         'vehicle_id',
     ];
 }

@@ -2,20 +2,36 @@
 import SelectInput from "@/Shared/SelectInput.vue";
 import TextInput from "@/Shared/TextInput.vue";
 import { PlusIcon } from "@heroicons/vue/24/solid";
-import { useForm } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { router, useForm } from "@inertiajs/vue3";
+import { ref, watch } from "vue";
 
 const props = defineProps({
   vehicle: Object,
   activeTab: String,
+  users: Object,
   errors: Object,
 });
 
 const showDialog = ref(false);
 
+watch(showDialog, (newValue, oldValue) => {
+  if (newValue) {
+    if (props.activeTab === "transports") {
+      loadData("users");
+    }
+  } else {
+    if (props.activeTab === "transports") {
+      loadData("transports");
+    }else{
+      loadData("expenses");
+    }
+  }
+});
+
+const categoryList = ["fuel", "maintenance", "repairs", "tolls"];
 // Transport form
 const transportForm = useForm({
-  date: "",
+  date: new Date().toISOString().split("T")[0],
   from: "",
   to: "",
   description: "",
@@ -28,27 +44,36 @@ const transportForm = useForm({
 // Expense form
 const expenseForm = useForm({
   ref_number: "",
-  date: "",
+  date: new Date().toISOString().split("T")[0],
   amount: "",
   description: "",
   category: "fuel",
   vehicle_id: props.vehicle.id,
 });
 
-// Save transport details
-const saveTransport = () => {
-  transportForm.post("/transports", {
-    preserveScroll: true,
-    onSuccess: () => transportForm.reset(),
-  });
+const loadData = (items) => {
+  router.reload({ only: [items] });
 };
 
 // Save expense details
 const submit = () => {
-  expenseForm.post("/expenses", {
-    preserveScroll: true,
-    onSuccess: () => expenseForm.reset(),
-  });
+  if (props.activeTab === "transports") {
+    transportForm.post("/transports", {
+      preserveScroll: true,
+      onSuccess: () => {
+        transportForm.reset();
+        showDialog.value = false;
+      },
+    });
+  } else {
+    expenseForm.post("/expenses", {
+      preserveScroll: true,
+      onSuccess: () => {
+        expenseForm.reset();
+        showDialog.value = false;
+      },
+    });
+  }
 };
 </script>
 
@@ -90,12 +115,12 @@ const submit = () => {
             <TextInput
               v-model="transportForm.distance"
               class="pr-6 pb-6 w-1/2"
-              label="Distance"
+              label="Distance (Km)"
             />
 
-            <SelectInput label="Customer" class="pr-6 pb-6 w-full" />
+            <SelectInput v-model="transportForm.user_id" label="Customer" :items="users?.others ?? []" class="pr-6 pb-6 w-full" />
 
-            <SelectInput label="Driver" class="pr-6 pb-6 w-full" />
+            <SelectInput v-model="transportForm.driver_id" label="Driver" :items="users?.drivers ?? []" class="pr-6 pb-6 w-full" />
 
             <div class="pr-6 pb-6 w-full">
               <label class="text-sm">Other Details:</label>
@@ -110,47 +135,57 @@ const submit = () => {
         <!-- Expense Form -->
         <div v-if="activeTab === 'expenses'">
           <div class="flex flex-wrap -mr-6 text-start">
-            <select v-model="expenseForm.category" class="w-full p-2 border rounded mb-2">
-              <option value="fuel">Fuel</option>
-              <option value="maintenance">Maintenance</option>
-              <option value="repairs">Repairs</option>
-              <option value="tolls">Tolls</option>
-            </select>
-            <input
-              v-model="expenseForm.amount"
-              type="number"
-              placeholder="Amount"
-              class="w-full p-2 border rounded mb-2"
+            <TextInput
+              v-model="expenseForm.ref_number"
+              class="pr-6 pb-6 w-1/2"
+              label="Ref Number"
             />
-            <textarea
-              v-model="expenseForm.description"
-              placeholder="Description"
-              class="w-full p-2 border rounded mb-2"
-            ></textarea>
-            <input
+
+            <SelectInput
+              v-model="expenseForm.category"
+              :items="categoryList"
+              label="Category"
+              class="pr-6 pb-6 w-1/2"
+            />
+
+            <TextInput
               v-model="expenseForm.date"
+              class="pr-6 pb-6 w-1/2"
               type="date"
-              placeholder="Date"
-              class="w-full p-2 border rounded mb-2"
+              label="Date"
             />
+
+            <TextInput
+              v-model="expenseForm.amount"
+              class="pr-6 pb-6 w-1/2"
+              label="Amount"
+            />
+
+            <div class="pr-6 pb-6 w-full">
+              <label class="text-sm">Other Details:</label>
+              <textarea
+                v-model="expenseForm.description"
+                class="w-full border rounded dark:bg-primary-600"
+              ></textarea>
+            </div>
           </div>
         </div>
-          <!-- Action Buttons -->
-          <div class="flex justify-end space-x-2">
-            <button
-              @click="showDialog = false"
-              class="bg-gray-700 text-white px-4 py-2 rounded"
-            >
-              Cancel
-            </button>
+        <!-- Action Buttons -->
+        <div class="flex justify-end space-x-2">
+          <button
+            @click="showDialog = false"
+            type="button"
+            class="bg-gray-700 text-white px-4 py-2 rounded"
+          >
+            Cancel
+          </button>
 
-            <button
-              type="submit"
-              class="bg-blue-900 hover:bg-blue-500 px-4 py-2 rounded ml-3"
-            >
-              Save
-            </button>
-          
+          <button
+            type="submit"
+            class="bg-blue-900 hover:bg-blue-500 px-4 py-2 rounded ml-3"
+          >
+            Save
+          </button>
         </div>
       </form>
     </div>

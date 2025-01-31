@@ -19,6 +19,8 @@ const selectList = [
 
 const form = useForm({
   name: props.user ? props.user.name : null,
+  password: props.user ? props.user.password : null,
+  password_confirm: props.user ? props.user.password_confirm : null,
   email: props.user ? props.user.email : null,
   role_id: props.user ? props.user.role_id : null,
   department_id: props.user ? props.user.department_id : null,
@@ -65,6 +67,7 @@ const submit = () => {
               :error="errors.email"
               class="pr-6 pb-8 w-1/2 flex-col"
               label="Email"
+              type="email"
             />
 
             <text-input

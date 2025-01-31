@@ -43,7 +43,7 @@ const updateValue = (event) => {
       class="
         mt-1
         block
-        w-full
+        w-full capitalize
         border border-gray-300 dark:border-primary-500 dark:focus:border-primary-500
         bg-white dark:bg-primary-600 dark:focus:bg-primary-500
         rounded-md
@@ -59,6 +59,7 @@ const updateValue = (event) => {
       <option
         v-for="(item, index) in items"
         :key="index"
+        class="capitalize"
         :value="itemValue(item)"
       >
         {{ itemText(item) }}

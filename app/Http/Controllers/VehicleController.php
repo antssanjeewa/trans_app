@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Transport;
+use App\Models\User;
+use Inertia\Inertia;
 use App\Models\Vehicle;
+use App\Models\Expenses;
 use App\Http\Requests\StoreVehicleRequest;
 use App\Http\Requests\UpdateVehicleRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -14,9 +18,9 @@ class VehicleController extends Controller
      */
     public function index()
     {
-        $vehicles = Vehicle::all();
-        
-        return inertia('Vehicles/index',[
+        $vehicles = Vehicle::with('files')->get();
+
+        return inertia('Vehicles/index', [
             "items" => $vehicles,
             'filters' => request()->all('search', 'count'),
         ]);
@@ -35,7 +39,19 @@ class VehicleController extends Controller
      */
     public function store(StoreVehicleRequest $request)
     {
-        Vehicle::create($request->validated());
+        $vehicle = Vehicle::create($request->validated());
+
+        $file = $request->file('image');
+        $path = $file->store('vehicles', 'public');
+
+        // Storage::disk('public')->delete($file->path);
+        $vehicle->files()->create([
+            'name' => $file->getClientOriginalName(),
+            'path' => $path,
+            'category' => "image",
+            'size' => $file->getSize(),
+        ]);
+
         return to_route('vehicles.index');
     }
 
@@ -44,11 +60,21 @@ class VehicleController extends Controller
      */
     public function show(Vehicle $vehicle)
     {
-        $transports = JsonResource::collection(Vehicle::paginate());
-        return inertia('Vehicles/view',[
+        $vehicle->load('files');
+
+        $transports = fn() => JsonResource::collection(Transport::paginate(1));
+
+        $expenses = Inertia::lazy(fn() => JsonResource::collection(Expenses::paginate()));
+
+        $users = Inertia::lazy(fn() => User::all()->groupBy(function ($user) {
+            return $user->role_id === 1 ? 'drivers' : 'others';
+        }));
+
+        return inertia('Vehicles/view', [
             'item' => $vehicle,
             "transports" => $transports,
-            "expenses" => $transports,
+            "expenses" => $expenses,
+            "users" => $users,
         ]);
     }
 

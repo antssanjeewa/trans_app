@@ -25,6 +25,7 @@ class StoreVehicleRequest extends FormRequest
             'type' => 'required',
             'reg_number' => 'required',
             'fuel_capacity' => 'nullable',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 }

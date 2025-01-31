@@ -2,22 +2,20 @@
 
 namespace App\Models;
 
-use App\Models\File;
 use App\Trait\GenerateUuid;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Vehicle extends Model
+class File extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use GenerateUuid;
 
     protected $fillable = [
-        'type',
-        'reg_number',
-        'fuel_capacity',
+        'name',
+        'path',
+        'category',
+        'size'
     ];
 
     public function scopeFilter($query, array $filters)
@@ -28,11 +26,4 @@ class Vehicle extends Model
             });
         });
     }
-
-
-    public function files()
-    {
-        return $this->morphMany(File::class, 'attachable');
-    }
-
 }

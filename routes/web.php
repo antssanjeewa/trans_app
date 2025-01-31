@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\TransportController;
 use App\Http\Controllers\UsersController;
 
 use App\Http\Controllers\VehicleController;
@@ -32,6 +34,8 @@ Route::middleware([
 
 
     Route::resource('vehicles',VehicleController::class);
+    Route::resource('expenses',ExpensesController::class);
+    Route::resource('transports',TransportController::class);
     
     Route::resource('users',UsersController::class);
     Route::resource('roles',RoleController::class);
