@@ -21,10 +21,11 @@ const activeTab = ref("transports");
 const transportHeaders = [
   { text: "ID", value: "id" },
   { text: "Date", value: "date" },
+  { text: "Client", value: "user_name" },
   { text: "From", value: "from" },
   { text: "To", value: "to" },
   { text: "Distance (Km)", value: "distance" },
-  { text: "Client", value: "user_id" },
+  { text: "Driver", value: "driver_name" },
   { text: "", value: "actions" },
 ];
 
@@ -75,13 +76,13 @@ const loadTransports = (page = 1) => {
         <div class="flex justify-end items-center">
           <Link
             class="text-blue-300 border-x dark:border-primary-700 bg-primary-800 dark:hover:bg-primary-700 p-5"
-            :href="route('vehicles.create')"
+            :href="route('vehicles.edit', item.id)"
           >
             <PencilIcon class="w-5" />
           </Link>
           <Link
             class="text-red-600 bg-primary-800 dark:hover:bg-primary-700 p-5"
-            :href="route('vehicles.create')"
+            :href="route('vehicles.destroy', item.id)"
           >
             <TrashIcon class="w-5" />
           </Link>

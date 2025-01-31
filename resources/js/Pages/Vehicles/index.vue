@@ -38,15 +38,22 @@ watch(() => form, throttledHandler, { deep: true });
       <h1 class="mb-10 font-bold text-3xl text-center">Vehicle List</h1>
 
       <div class="flex flex-wrap justify-around">
-        <div 
-        v-for="item in items" :key="item.id" 
-        class="text-center border p-3 rounded-xl dark:border-primary-700">
-          <Link :href="route('vehicles.show', item.id)" >
+        <div
+          v-for="item in items"
+          :key="item.id"
+          class="text-center border p-3 rounded-xl dark:border-primary-700"
+        >
+          <Link :href="route('vehicles.show', item.id)">
+            <img
+              v-if="item.files[0]"
+              :src="`/storage/${item.files[0]?.path}`"
+              alt="image"
+              width="150"
+              class="h-[150px] object-cover rounded"
+            />
+            <TruckIcon v-else class="w-36" />
 
-          <img v-if="item.files[0]" :src="`/storage/${item.files[0]?.path}`" alt="image" width="150" >
-          <TruckIcon v-else class="w-40" />
-
-            <div class="dark:bg-primary-700">
+            <div class="dark:bg-primary-700 mt-2">
               <div>{{ item.reg_number }}</div>
             </div>
           </Link>

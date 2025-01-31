@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Transport;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Vehicle;
 use App\Models\Expenses;
+use App\Models\Transport;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\TransportResource;
 use App\Http\Requests\StoreVehicleRequest;
 use App\Http\Requests\UpdateVehicleRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -62,7 +64,7 @@ class VehicleController extends Controller
     {
         $vehicle->load('files');
 
-        $transports = fn() => JsonResource::collection(Transport::paginate(1));
+        $transports = fn() => TransportResource::collection(Transport::paginate());
 
         $expenses = Inertia::lazy(fn() => JsonResource::collection(Expenses::paginate()));
 
@@ -83,7 +85,11 @@ class VehicleController extends Controller
      */
     public function edit(Vehicle $vehicle)
     {
-        //
+        $vehicle->setAppends(['profile_image_url']);
+
+        return inertia('Vehicles/form', [
+            "item" => $vehicle
+        ]);
     }
 
     /**
@@ -91,7 +97,25 @@ class VehicleController extends Controller
      */
     public function update(UpdateVehicleRequest $request, Vehicle $vehicle)
     {
-        //
+        $vehicle->update($request->all());
+
+        $file = $request->file('image');
+        $path = $file->store('vehicles', 'public');
+
+        $image = $vehicle->files()->first();
+        if ($image) {
+            Storage::disk('public')->delete($image->path);
+            $image->delete();
+        }
+
+        $vehicle->files()->create([
+            'name' => $file->getClientOriginalName(),
+            'path' => $path,
+            'category' => "image",
+            'size' => $file->getSize(),
+        ]);
+
+        return to_route('vehicles.index');
     }
 
     /**

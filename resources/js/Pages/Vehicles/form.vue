@@ -1,7 +1,7 @@
 <script setup>
 import TextInput from "@/Shared/TextInput.vue";
 import { computed } from "vue";
-import { useForm } from "@inertiajs/vue3";
+import { router, useForm } from "@inertiajs/vue3";
 import SelectInput from "@/Shared/SelectInput.vue";
 import { ref } from "vue";
 import { PencilIcon, TruckIcon } from "@heroicons/vue/24/solid";
@@ -18,6 +18,7 @@ const form = useForm({
   image: null,
   fuel_capacity: props.item ? props.item.fuel_capacity : null,
   type: props.item ? props.item.type : null,
+  _method:  props.item ? 'put' : 'post'
 });
 
 const imagePreview = ref(null);
@@ -25,6 +26,7 @@ const imagePreview = ref(null);
 const handleFileChange = (event) => {
   const file = event.target.files[0]; // Get the selected file
   form.image = file;
+  
 
   if (file) {
     // Use FileReader or URL.createObjectURL to create an image preview URL
@@ -40,7 +42,7 @@ const btnText = computed(() => {
 
 const submit = () => {
   if (props.item) {
-    form.put(route("vehicles.update", props.item.id));
+    form.post(route("vehicles.update", props.item.id));
   } else {
     form.post(route("vehicles.store"));
   }
@@ -71,12 +73,14 @@ const submit = () => {
                   class="object-cover"
                   for="image"
                 >
+                
                   <img
-                    v-if="imagePreview"
-                    :src="imagePreview"
+                    v-if="imagePreview ?? item?.profile_image_url"
+                    :src="imagePreview ?? item.profile_image_url"
                     alt="Vehicle Image Preview"
                     width="100"
                     height="100"
+                    class="h-[100px]"
                   />
 
                   <TruckIcon v-else class="w-20 h-20" />

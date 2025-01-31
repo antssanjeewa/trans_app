@@ -20,6 +20,12 @@ class Vehicle extends Model
         'fuel_capacity',
     ];
 
+    public function getProfileImageUrlAttribute()
+    {
+        $file = $this->files()->where('category', 'image')->latest()->first();
+        return $file ? asset('storage/' . $file->path) : null;
+    }
+
     public function scopeFilter($query, array $filters)
     {
         $query->when($filters['search'] ?? null, function ($query, $search) {
